@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<title>C3 HUB — conectando…</title>
+<style>
+  body { font-family: -apple-system, sans-serif; display: grid; place-items: center; min-height: 100vh; background: #f5f2ea; color: #17140e; }
+  .box { text-align: center; }
+  code { background: #e7e2d3; padding: 2px 8px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>Conectando ao C3 HUB…</h2>
+  <p id="msg">Repassando a autorização para o app local.</p>
+</div>
+<script>
+  // Ponte de OAuth: o Mercado Livre não aceita redirect_uri local (127.0.0.1),
+  // então ele redireciona para esta página pública, que repassa o code ao hub
+  // rodando na máquina local. O code é de uso único e expira em minutos.
+  (function () {
+    var qs = window.location.search || '';
+    if (qs.indexOf('code=') !== -1 || qs.indexOf('error=') !== -1) {
+      window.location.replace('http://127.0.0.1:4300/api/oauth/ml/callback' + qs);
+    } else {
+      document.getElementById('msg').innerHTML =
+        'Nada para repassar — abra a conexão a partir do app local (<code>Config → Conectar Mercado Livre</code>).';
+    }
+  })();
+</script>
+</body>
+</html>
